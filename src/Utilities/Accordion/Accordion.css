@@ -1,0 +1,29 @@
+.accordion-container {
+  border: 1px solid #9b61ff;
+  border-radius: 10px;
+}
+
+.accordion-head {
+  background-color: #9b61ff;
+  border-radius: 10px 10px 0px 0px;
+  min-height: 30px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  line-height: 30px;
+}
+.accordion-icon-style {
+  float: right;
+  color: white;
+  vertical-align: middle;
+}
+
+.accordion-title-style {
+  /* font-size: 28px; */
+  /* font-weight: 500; */
+  color: white;
+}
+
+.accordion-body {
+  padding: 15px;
+}

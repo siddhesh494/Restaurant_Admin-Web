@@ -1,0 +1,54 @@
+
+.button-container {
+}
+
+.button-contained {
+  background-color: #FF7F50;
+  color: white;
+
+}
+.button-outlined {
+  border: 1px solid #FF7F50;
+  color: #FF7F50;
+}
+
+
+.button-lg {
+  padding: 20px 40px;
+}
+.button-md {
+  padding: 15px 30px;
+}
+
+.button-s {
+  padding: 10px 20px;
+}
+
+.button-xs {
+  padding: 8px 12px;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .button-lg {
+    padding: 10px 20px;
+  }
+  .button-md {
+    padding: 5px 10px;
+  }
+  
+  .button-s {
+    padding: 4px 8px;
+  }
+}
+
+
+@media screen and (max-width: 468px) {
+ 
+}
+
+
+@media screen and (max-width: 285px) {
+
+}

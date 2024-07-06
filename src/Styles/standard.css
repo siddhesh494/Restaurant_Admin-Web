@@ -1,0 +1,85 @@
+
+/* **************************** color schemaa ***************************** */
+.primary-color {
+  color: #6A5ACD;
+}
+.secondary-color {
+  color: #FFF700;;
+}
+.button-color {
+  color: #FF7F50;;
+}
+.text-color {
+  color: #36454F;;
+}
+/* ************************************************************************ */
+
+.heading {
+  font-size: 42px;
+}
+.logo-head {
+  font-size: 30px;
+}
+.sub-heading {
+  font-size: 30px;
+}
+.info-text {
+  font-size: 22px;
+}
+.sm-info-text {
+  font-size: 18px;
+}
+.sx-info-text {
+  font-size: 16px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .heading {
+    font-size: 35px;
+  }
+  .logo-head {
+    font-size: 26px;
+  }
+  .sub-heading {
+    font-size: 26px;
+  }
+  .info-text {
+    font-size: 20px;
+  }
+  .sm-info-text {
+    font-size: 12px;
+  }
+}
+
+
+@media screen and (max-width: 468px) {
+  .heading {
+    font-size: 22px;
+  }
+  .logo-head {
+    font-size: 22px;
+  }
+  .sub-heading {
+    font-size: 22px;
+  }
+  .info-text {
+    font-size: 14px;
+  }
+}
+
+
+@media screen and (max-width: 285px) {
+  .heading {
+    font-size: 16px;
+  }
+  .logo-head {
+    font-size: 20px;
+  }
+  .sub-heading {
+    font-size: 20px;
+  }
+  .info-text {
+    font-size: 12px;
+  }
+}
