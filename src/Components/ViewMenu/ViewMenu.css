@@ -1,0 +1,34 @@
+
+
+.veg-nonveg-icon {
+  width: 25px;
+  height: 25px;
+  /* object-fit: cover */
+}
+
+.delete-btn {
+  color: red;
+  font-weight: 500;
+  border: 1px solid red;
+  border-radius: 6px;
+  padding: 7px 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .delete-btn {
+    padding: 4px 8px;
+  }
+}
+
+
+@media screen and (max-width: 468px) {
+  /* .veg-nonveg-icon {
+    width: 20px;
+    height: 20px;
+  } */
+}
+
+
+@media screen and (max-width: 285px) {
+  
+}

@@ -1,23 +1,110 @@
-import React, {useState} from 'react'
-import Button from '../../Utilities/Button/Button'
-import RestaurantDetails from '../../MockData/RestaurantDetails.json'
-import Accordion from '../../Utilities/Accordion/Accordion'
-import { map } from 'lodash'
+import React, {useEffect, useState} from 'react'
+import Button from '../../UtilitiesComponents/Button/Button'
+import Accordion from '../../UtilitiesComponents/Accordion/Accordion'
+import { filter, find, findIndex, map } from 'lodash'
 import ViewMenu from '../ViewMenu/ViewMenu'
 import AddRestaurant from '../AddRestaurant/AddRestaurant'
+import { postRequestAsync } from '../../utils/apiInstance'
+import urls from '../../utils/apiUrls'
 
 
 const HomePage = () => {
-
-  const [restaurantDetails, setRestaurantDetails] = useState(RestaurantDetails)
-  const [accordionState, setAccordionState] = useState(map(RestaurantDetails, (i) => false))
-  const [saveState, setSaveState] = useState(map(RestaurantDetails, (i) => false))
+  const [originalRestaurantDetails, setOriginalRestaurantDetails] = useState([])
+  const [restaurantDetails, setRestaurantDetails] = useState([])
+  const [accordionState, setAccordionState] = useState([])
+  const [saveState, setSaveState] = useState([])
   
   const [showViewModal, setShowViewModal]= useState(false)
   const [showAddModal, setShowAddModal]= useState(false)
   const [viewModalDetails, setViewModalDetails] = useState({})
-  const saveFnForRestDetails = () => {
 
+  async function getAllRestaurantDetails() {
+    try {
+      const response = await postRequestAsync(urls.GET, {})
+      if(response.success) {
+        const temp = map(response.data, (item) => {
+          return {
+            id: item._id,
+            name: item.restaurantName,
+            description: item.description,
+            location: item.location,
+            priceFor2: item.priceFor2,
+            menu: item.menu || []
+          }
+        })
+        setRestaurantDetails([...temp])
+        setOriginalRestaurantDetails(response.data)
+        setAccordionState(map(temp, (i) => false))
+        setSaveState(map(temp, (i) => false))
+      } else {
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
+  async function updateRestaurantDetails(id) {
+    try {
+      const currData = find(restaurantDetails, {id: id})
+      if(!currData) {
+        console.log("no data found to update")
+        return
+      }
+      const updateObj = {
+        id: id,
+        updateData: {
+          restaurantName: currData.name,
+          description: currData.description,
+          location: currData.location,
+          priceFor2: currData.priceFor2
+        }
+      }
+      const response = postRequestAsync(urls.UPDATE,updateObj)
+      if(response.success) {
+
+      } else {
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function deleteRestaurantDetails(id) {
+    try {
+      const updateObj = {
+        id: id
+      }
+      const response = await postRequestAsync(urls.DELETE, updateObj)
+      if(response.success) {
+        const temp = filter(restaurantDetails, (i) => !(i.id === id))
+        setRestaurantDetails([...temp])
+      } else {
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getAllRestaurantDetails()
+  }, [])
+
+  const onCancelClick = () => {
+    const temp = map(originalRestaurantDetails, (item) => {
+      return {
+        id: item._id,
+        name: item.restaurantName,
+        description: item.description,
+        location: item.location,
+        priceFor2: item.priceFor2,
+        menu: item.menu || []
+      }
+    })
+    setRestaurantDetails([...temp])
   }
 
   return (
@@ -25,10 +112,12 @@ const HomePage = () => {
     <AddRestaurant
       showAddModal={showAddModal}
       setShowAddModal={setShowAddModal}
+      getAllRestaurantDetails={getAllRestaurantDetails}
     />
     <ViewMenu
       showViewModal={showViewModal}
       setShowViewModal={setShowViewModal}
+      viewModalDetails={viewModalDetails}
     />
 
     <div className='m-10'>
@@ -44,7 +133,7 @@ const HomePage = () => {
       </div>
 
       <div className='my-10'>
-        {map(RestaurantDetails, (item, ind) => {
+        {map(restaurantDetails, (item, ind) => {
           return (
             <div className='my-5' key={ind}>
               <Accordion
@@ -69,8 +158,19 @@ const HomePage = () => {
                             handleOnClick={() => {
                               saveState[ind] = false
                               setSaveState([...saveState])
+                              onCancelClick()
                             }}
                           />
+                        </div>
+                        <div className='mr-4'>
+                        <button
+                          className='delete-btn'
+                          onClick={() => {
+                            deleteRestaurantDetails(item.id)
+                          }}
+                        >
+                          Delete
+                        </button>
                         </div>
                         <div>
                           <Button
@@ -79,7 +179,8 @@ const HomePage = () => {
                             handleOnClick={() => {
                               saveState[ind] = false
                               setSaveState([...saveState])
-                              saveFnForRestDetails()
+                              updateRestaurantDetails(item.id)
+                              // saveFnForRestDetails()
                             }}
                           />
                         </div>
@@ -159,6 +260,7 @@ const HomePage = () => {
                         <span 
                           className='underline text-blue-500 cursor-pointer'
                           onClick={() => {
+                            setViewModalDetails({...restaurantDetails[ind]})
                             setShowViewModal(true)
                           }}  
                         >

@@ -1,5 +1,7 @@
 
-.button-container {
+.disabled-button {
+  cursor: not-allowed;
+  background-color: rgb(211, 211, 211) !important;
 }
 
 .button-contained {
@@ -14,18 +16,18 @@
 
 
 .button-lg {
-  padding: 20px 40px;
+  padding: 16px 40px;
 }
 .button-md {
-  padding: 15px 30px;
+  padding: 10px 30px;
 }
 
 .button-s {
-  padding: 10px 20px;
+  padding: 8px 20px;
 }
 
 .button-xs {
-  padding: 8px 12px;
+  padding: 7px 12px;
 }
 
 

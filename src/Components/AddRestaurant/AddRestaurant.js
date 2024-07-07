@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
-import Modal from '../../Utilities/Modal/Modal'
-import Button from '../../Utilities/Button/Button'
-import Accordion from '../../Utilities/Accordion/Accordion'
-import { findIndex, map } from 'lodash'
-import Toggle from '../../Utilities/Toggle/Toggle'
+import React, { useEffect, useState } from 'react'
+import Modal from '../../UtilitiesComponents/Modal/Modal'
+import Button from '../../UtilitiesComponents/Button/Button'
+import Accordion from '../../UtilitiesComponents/Accordion/Accordion'
+import { filter, findIndex, forEach, isEmpty, map } from 'lodash'
+import { postRequestAsync } from '../../utils/apiInstance'
+import urls from '../../utils/apiUrls'
+import DeleteIcon from '../../assests/PNG/delete.png'
 
 const AddRestaurant = ({
   showAddModal, 
-  setShowAddModal
+  setShowAddModal,
+  getAllRestaurantDetails
 }) => {
 
   const [name, setName] = useState('')
@@ -16,6 +19,42 @@ const AddRestaurant = ({
   const [priceFor2, setPriceFor2] = useState('')
 
   const [menuDetails, setMenuDetails] = useState([])
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false)
+
+  useEffect(() => {
+    let isDisabled = false
+    if(!(name && description && location && priceFor2)) {
+      isDisabled = true
+    }
+
+
+    forEach(menuDetails, (item) => {
+      if(!item.categoryName) {
+        isDisabled = true
+      }
+      if(isEmpty(item.food)) {
+        isDisabled = true
+      }
+      forEach(item.food, (f) => {
+        if(!f.foodName) {
+          isDisabled = true
+        }
+      })
+    })
+
+    setIsSaveDisabled(isDisabled)
+  }, [name, description, location, priceFor2, menuDetails])
+
+  const handleOnClose = () => {
+    setShowAddModal(false)
+    setMenuDetails([])
+    setIsSaveDisabled(false)
+    setName('')
+    setDescription('')
+    setLocation('')
+    setPriceFor2('')
+    getAllRestaurantDetails()
+  }
 
   const keyValue = (key, value) => {
     return (
@@ -49,6 +88,52 @@ const AddRestaurant = ({
       price: 0
     })
     setMenuDetails([...menuDetails])
+  }
+
+  async function createNewRestaurant() {
+    try {
+      const createObj = {
+        restaurantName: name,
+        description: description,
+        location: location,
+        priceFor2: priceFor2,
+      }
+      if(menuDetails && !isEmpty(menuDetails)) {
+        createObj.menu = map(menuDetails, (item) => {
+          return {
+            categoryName: item.categoryName,
+            foodList: map(item.food, (i) => ({
+              foodName: i.foodName,
+              isVeg: i.isVeg,
+              price: i.price
+            }))
+          }
+        })
+      }
+      const response = await postRequestAsync(urls.CREATE, createObj)
+      if(response.success) {
+        handleOnClose()
+      } else {
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleFoodDelete = (categoryInd, foodInd) => {
+    const category = {
+      categoryName: menuDetails[categoryInd].categoryName,
+      isOpen: menuDetails[categoryInd].isOpen,
+      food: filter(menuDetails[categoryInd].food, (item, i) => !(i === foodInd))
+    }
+    menuDetails[categoryInd] = category
+    setMenuDetails([...menuDetails])
+  }
+
+  const handleCategoryDelete = (categoryInd) => {
+    const temp = filter(menuDetails, (item, i) => !(i === categoryInd))
+    setMenuDetails([...temp])
   }
 
   const ModalBody = (
@@ -128,6 +213,21 @@ const AddRestaurant = ({
                 }}
               >
                 <div>
+                  <div 
+                    className='flex justify-end cursor-pointer'
+                    onClick={() => {
+                      handleCategoryDelete(ind)
+                    }}
+                  >
+                    <div className='border border-black px-4 py-1 rounded-full bg-white'>
+                      <img
+                        src={DeleteIcon}
+                        alt='delete-icon'
+                        width="20"
+                      />
+                    </div>
+                  </div>
+                  
                   {
                     keyValue(
                       "Category Name",
@@ -146,7 +246,28 @@ const AddRestaurant = ({
 
                   {map(category.food, (foodItem, fInd) => {
                     return (
-                      <div className='border border-black p-5 my-3 rounded-lg' key={fInd}>
+                      <div className='border border-black p-5 pt-0 my-7 rounded-lg' key={fInd}>
+                        <div 
+                          className='flex justify-end cursor-pointer'
+                          onClick={() => {
+                            handleFoodDelete(ind, fInd)
+                          }}
+                        >
+                          <div 
+                            className='border border-black px-4 py-1 rounded-full bg-white'
+                            style={{
+                              top: "-14px",
+                              right: "-21px",
+                              position: "relative"
+                            }}
+                          >
+                            <img
+                              src={DeleteIcon}
+                              alt='delete-icon'
+                              width="20"
+                            />
+                          </div>
+                        </div>
                         <div className=' flex justify-between'>
                           <div>
                             <input
@@ -166,7 +287,7 @@ const AddRestaurant = ({
                                   checked={foodItem.isVeg}
                                   id={`veg-${category?.categoryName}-${fInd}`} 
                                   type="radio" 
-                                  name="default-radio" 
+                                  name={`veg-${category?.categoryName}-${fInd}`} 
                                   className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
                                   onChange={() => {
                                     if(menuDetails[ind].food[fInd] && typeof menuDetails[ind].food[fInd] === "object") {
@@ -187,7 +308,7 @@ const AddRestaurant = ({
                                   checked={!foodItem.isVeg}
                                   id={`nonveg-${category?.categoryName}-${fInd}`} 
                                   type="radio" 
-                                  name="default-radio" 
+                                  name={`nonveg-${category?.categoryName}-${fInd}`} 
                                   className=" text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
                                   onChange={() => {
                                     if(menuDetails[ind].food[fInd] && typeof menuDetails[ind].food[fInd] === "object") {
@@ -257,6 +378,10 @@ const AddRestaurant = ({
         <Button
           name='Save'
           size='s'
+          isDisabled={isSaveDisabled}
+          handleOnClick={() => {
+            createNewRestaurant()
+          }}
         />
       </div>
     </div>
@@ -268,11 +393,9 @@ const AddRestaurant = ({
     >
       <Modal
         showModal={showAddModal}
-        heading='View Menu'
+        heading='Add Restaurant'
         body={ModalBody}
-        handleOnClose={() => {
-          setShowAddModal(false)
-        }}
+        handleOnClose={handleOnClose}
       />
     </div>
   )
