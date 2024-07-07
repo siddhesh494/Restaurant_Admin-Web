@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import Button from '../../UtilitiesComponents/Button/Button'
 import Accordion from '../../UtilitiesComponents/Accordion/Accordion'
-import { filter, find, findIndex, map } from 'lodash'
+import { filter, find, map } from 'lodash'
 import ViewMenu from '../ViewMenu/ViewMenu'
 import AddRestaurant from '../AddRestaurant/AddRestaurant'
 import { postRequestAsync } from '../../utils/apiInstance'
 import urls from '../../utils/apiUrls'
 
 
-const HomePage = () => {
+const HomePage = ({
+  notifyError,
+  notifySuccess
+}) => {
   const [originalRestaurantDetails, setOriginalRestaurantDetails] = useState([])
   const [restaurantDetails, setRestaurantDetails] = useState([])
   const [accordionState, setAccordionState] = useState([])
@@ -37,9 +40,11 @@ const HomePage = () => {
         setAccordionState(map(temp, (i) => false))
         setSaveState(map(temp, (i) => false))
       } else {
+        notifyError()
         console.log(response)
       }
     } catch (error) {
+      notifyError()
       console.log(error)
     }
     
@@ -61,13 +66,16 @@ const HomePage = () => {
           priceFor2: currData.priceFor2
         }
       }
-      const response = postRequestAsync(urls.UPDATE,updateObj)
+      const response = await postRequestAsync(urls.UPDATE,updateObj)
+      console.log(response)
       if(response.success) {
-
+        notifySuccess("Updated successfully")
       } else {
         console.log(response)
+        notifyError()
       }
     } catch (error) {
+      notifyError()
       console.log(error)
     }
   }
@@ -79,12 +87,15 @@ const HomePage = () => {
       }
       const response = await postRequestAsync(urls.DELETE, updateObj)
       if(response.success) {
+        notifySuccess("Restaurant Deleted Successfully")
         const temp = filter(restaurantDetails, (i) => !(i.id === id))
         setRestaurantDetails([...temp])
       } else {
+        notifyError()
         console.log(response)
       }
     } catch (error) {
+      notifyError()
       console.log(error)
     }
   }
@@ -113,11 +124,15 @@ const HomePage = () => {
       showAddModal={showAddModal}
       setShowAddModal={setShowAddModal}
       getAllRestaurantDetails={getAllRestaurantDetails}
+      notifyError={notifyError}
+      notifySuccess={notifySuccess}
     />
     <ViewMenu
       showViewModal={showViewModal}
       setShowViewModal={setShowViewModal}
       viewModalDetails={viewModalDetails}
+      notifyError={notifyError}
+      notifySuccess={notifySuccess}
     />
 
     <div className='m-10'>

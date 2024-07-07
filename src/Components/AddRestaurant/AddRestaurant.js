@@ -10,7 +10,9 @@ import DeleteIcon from '../../assests/PNG/delete.png'
 const AddRestaurant = ({
   showAddModal, 
   setShowAddModal,
-  getAllRestaurantDetails
+  getAllRestaurantDetails,
+  notifyError,
+  notifySuccess
 }) => {
 
   const [name, setName] = useState('')
@@ -113,10 +115,13 @@ const AddRestaurant = ({
       const response = await postRequestAsync(urls.CREATE, createObj)
       if(response.success) {
         handleOnClose()
+        notifySuccess("New Restaurant Created Successfully")
       } else {
+        notifyError("Error while creating restaurant")
         console.log(response)
       }
     } catch (error) {
+      notifyError("Error while creating restaurant")
       console.log(error)
     }
   }
@@ -268,7 +273,7 @@ const AddRestaurant = ({
                             />
                           </div>
                         </div>
-                        <div className=' flex justify-between'>
+                        <div className=' md:flex md:justify-between'>
                           <div>
                             <input
                               placeholder='Enter Food Name'
@@ -326,12 +331,12 @@ const AddRestaurant = ({
                               </div>
                             </div>
                           </div>
-                          <div>
+                          <div className='mt-2'>
                             <input
                               type='number'
                               placeholder='Enter Price'
                               value={foodItem.price}
-                              className='border border-black py-1 w-24 rounded-md px-1'
+                              className='border border-black py-1 w-24 rounded-md px-1 mr-2' 
                               onChange={(e) => {
                                 if(menuDetails[ind].food[fInd] && typeof menuDetails[ind].food[fInd] === "object") {
                                   menuDetails[ind].food[fInd].price = e.target.value
@@ -339,6 +344,7 @@ const AddRestaurant = ({
                                 }
                               }}
                             />
+                            <span>Rs</span>
                           </div>
                         </div>
 

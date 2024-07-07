@@ -14,7 +14,9 @@ import urls from '../../utils/apiUrls'
 const ViewMenu = ({
   showViewModal,
   setShowViewModal,
-  viewModalDetails
+  viewModalDetails,
+  notifyError,
+  notifySuccess
 }) => {
   const [menuList, setMenuList] = useState([])
   const [accordionState, setAccordionState] = useState([])
@@ -23,8 +25,6 @@ const ViewMenu = ({
 
   useEffect(() => {
     let isDisabled = false
-    
-    console.log(menuList)
     forEach(menuList, (cat) => {
       if(!cat.categoryName) {
         isDisabled = true
@@ -73,11 +73,13 @@ const ViewMenu = ({
       })
 
       if(response.success) {
-
+        notifySuccess("Restaurant Updated Successfully")
       } else {
+        notifyError("Error while updating restaurant")
         console.log(response)
       }
     } catch (error) {
+      notifyError("Error while updating restaurant")
       console.log(error)
     }
   }
