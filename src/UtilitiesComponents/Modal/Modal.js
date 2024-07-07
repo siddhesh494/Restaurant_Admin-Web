@@ -22,7 +22,7 @@ export default function Modal({
                 
                  {/* heading */}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
+                  <h3 className="sub-heading font-semibold text-[#6A5ACD]">
                     {heading}
                   </h3>
                   <button

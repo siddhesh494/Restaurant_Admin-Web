@@ -1,4 +1,4 @@
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { Bounce, Slide, ToastContainer, toast } from 'react-toastify';
 import './App.css';
 import HomePage from './Components/HomePage/HomePage';
 import Navbar from './Components/Navbar/Navbar';
@@ -15,7 +15,7 @@ function App() {
     draggable: true,
     progress: undefined,
     theme: "dark",
-    transition: Bounce,
+    transition: Slide,
     });
   const notifyError = (text) => toast.error(text || "Something went wrong!", {
     position: "top-right",
@@ -26,15 +26,15 @@ function App() {
     draggable: true,
     progress: undefined,
     theme: "dark",
-    transition: Bounce,
+    transition: Slide,
     });;
   return (
     <>
-    <div>
+    <div >
         <ToastContainer 
           
         />
-      </div>
+    </div>
 
     <div>
       <Navbar />

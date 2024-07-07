@@ -142,16 +142,16 @@ const ViewMenu = ({
       {/*body*/}
       <div className='mb-5'>
 
-        <p>
+        <p className='sm-info-text'>
           {viewModalDetails.description}
         </p>
 
-        <p className='font-bold my-3'>
-          {viewModalDetails.location}
+        <p className='sm-info-text my-3'>
+          <span className='font-bold'>Location: </span>{viewModalDetails.location}
         </p>
 
-        <p className='font-semibold'>
-          {viewModalDetails.priceFor2}Rs for 2 person
+        <p className='sm-info-text font-semibold'>
+          {viewModalDetails.priceFor2} Rs for 2 person
         </p>
       </div>
 
@@ -209,7 +209,7 @@ const ViewMenu = ({
               <div className='my-5' key={ind}>
               <Accordion
                 isOpen={accordionState[ind]}
-                title={category.categoryName || "Default Name"}
+                title={category.categoryName || "Category Name"}
                 handleOnClick={() => {
                   accordionState[ind] = !accordionState[ind]
                   setAccordionState([...accordionState])
@@ -270,7 +270,7 @@ const ViewMenu = ({
                               width="20"
                             />
                           </div>
-                        </div> : <div className='px-4 py-4'></div>}
+                        </div> : <div className='px-4 py-2'></div>}
                         <div className={`${saveState ? "md:flex md:justify-between" : "flex justify-between"}`}>
                           <div>
                             {/* food name */}
@@ -294,7 +294,7 @@ const ViewMenu = ({
                                   
                                   className='mr-2 veg-nonveg-icon'
                                 />
-                                <span>{foodItem.foodName}</span>
+                                <span className='sm-info-text'>{foodItem.foodName}</span>
                               </div>
                             )}
                             {/* veg nonveg selection */}
@@ -365,7 +365,7 @@ const ViewMenu = ({
                               <label>Rs</label>
                               </div>
                             ) : (
-                              <span>{foodItem.price} Rs</span>
+                              <span className='sm-info-text'>{foodItem.price} Rs</span>
                             )}
                             
                           </div>

@@ -13,7 +13,7 @@ const Button = ({
     <div>
       <button
         disabled={isDisabled || isLoading}
-        className={`button-${type} font-semibold rounded-md ${size === "lg" ? "button-lg" : size === "md" ? "button-md" : size==='s' ? "button-s" : "button-xs"} ${isDisabled ? "disabled-button" : ""}`}
+        className={`hover:shadow-lg button-${type} font-semibold rounded-md ${size === "lg" ? "button-lg" : size === "md" ? "button-md" : size==='s' ? "button-s" : "button-xs"} ${isDisabled ? "disabled-button" : ""}`}
         onClick={handleOnClick}
       >
         <span className='sx-info-text'>{name}</span>

@@ -220,16 +220,16 @@ const AddRestaurant = ({
                 <div>
                   <div 
                     className='flex justify-end cursor-pointer'
-                    onClick={() => {
-                      handleCategoryDelete(ind)
-                    }}
                   >
-                    <div className='border border-black px-4 py-1 rounded-full bg-white'>
-                      <img
-                        src={DeleteIcon}
-                        alt='delete-icon'
-                        width="20"
-                      />
+                    <div className=''>
+                      <button
+                        className='delete-btn'
+                        onClick={() => {
+                          handleCategoryDelete(ind)
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                   

@@ -178,14 +178,14 @@ const HomePage = ({
                           />
                         </div>
                         <div className='mr-4'>
-                        <button
-                          className='delete-btn'
-                          onClick={() => {
-                            deleteRestaurantDetails(item.id)
-                          }}
-                        >
-                          Delete
-                        </button>
+                          <button
+                            className='delete-btn'
+                            onClick={() => {
+                              deleteRestaurantDetails(item.id)
+                            }}
+                          >
+                            Delete
+                          </button>
                         </div>
                         <div>
                           <Button
@@ -255,7 +255,7 @@ const HomePage = ({
                               }
                             }}
                           />
-                          <span className=''>RS for 2 person</span>
+                          <span className=''>Rs for 2 person</span>
                         </div>
                       </div>
                     ) : (
