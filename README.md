@@ -3,6 +3,13 @@
 - nvm - v0.39.7
 - React - v18.3.1
 
+## Video Demo
+
+
+https://github.com/siddhesh494/Restaurant_Admin-Web/assets/55457467/10788d90-93b9-4db5-9204-187f3813cd57
+
+
+
 ## To run the application 
 Note: To run this application you have to run the [Backend application](https://github.com/siddhesh494/Restaurant_Admin-Server) first and then run [Frontend application](https://github.com/siddhesh494/Restaurant_Admin-Web).
 
